@@ -1,4 +1,3 @@
-// UniqueIdGenerator.kt
 package com.example.sillyapp
 
 import java.text.SimpleDateFormat

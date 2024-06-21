@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var sillyPreferences: SharedPreferences
-    private val sillyChatId = "-1002151750178"
+    private val sillyChatId = "-1002151750178" // Kendi chat ID'nizi buraya ekleyin
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,10 +30,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun sendSillyUniqueIdToTelegram(sillyUniqueId: String) {
+        Log.d("MainActivity", "Sending message to chat ID: $sillyChatId with API key: ${BuildConfig.TELEGRAM_API_KEY}")
+
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 Log.d("MainActivity", "Attempting to send message: $sillyUniqueId")
                 val response = WackyRetrofitInstance.api.sendSillyMessage(sillyChatId, "New silly device ID: $sillyUniqueId")
+                Log.d("MainActivity", "Response Code: ${response.code()}")
+                Log.d("MainActivity", "Response Message: ${response.message()}")
                 if (response.isSuccessful) {
                     Log.d("MainActivity", "Message sent successfully")
                 } else {

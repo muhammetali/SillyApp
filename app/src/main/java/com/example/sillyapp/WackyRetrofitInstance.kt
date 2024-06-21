@@ -16,7 +16,7 @@ object WackyRetrofitInstance {
 
     private val retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl("https://api.telegram.org/")
+            .baseUrl("https://api.telegram.org/bot${BuildConfig.TELEGRAM_API_KEY}/") // API anahtarınızı burada kullanın
             .client(httpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
